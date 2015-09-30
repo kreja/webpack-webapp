@@ -1,0 +1,194 @@
+/**
+ * 全站通用样式
+ * $type {String}
+ */
+
+//colors
+$bodyBgColor: #eeeeee;
+$toolbarBgColor: #f8f8f8;
+$btnColor: #ff6600;
+$btnPressColor: #ff4400;
+$checkboxColor: #66668a;
+$borderColor: #dddddd;
+$fontColor: #31313b;
+$linkColor: #007aff;
+$labelColor: #999999;
+$tipsColor: #cccccc;
+$disabledColor: #afafb5;
+$plusBtnColor: #66668a;
+$plusBtnPressColor: #4a4a6f;
+
+em{
+    font-style: normal;
+}
+
+/* 清除浮动 */
+.clearfix:before, .clearfix:after {
+    display: table;
+    content: ' ';
+}
+.clearfix:after {
+    clear: both;
+}
+
+/* 单行省略号处理 */
+.ofh {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* 多行省略号处理 */
+.ofmh {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+//reset
+//取消最小字体限制，chrome for android已经不支持该属性
+* {
+    outline: 0;
+    //-webkit-text-size-adjust: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+body {
+    overflow: auto;
+    background: $bodyBgColor;
+    height: auto;
+    min-height: 100%;
+    color: $fontColor;
+    -webkit-overflow-scrolling: touch;
+    font: 12px/1.2 "STHeiti", Helvetica Neue, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+a {
+    color: $fontColor;
+}
+.disabled {
+    color: $disabledColor;
+}
+.modal-overlay,
+.preloader-indicator-overlay,
+.popup-overlay,
+.actions-modal,
+.modal,
+.navbar,
+.toolbar {
+    position: fixed;
+}
+
+.fl {
+    float: left;
+}
+.fr {
+    float: right;
+}
+.tc {
+    text-align: center;
+}
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}
+.mt0 {
+    margin-top: 0;
+}
+
+.list-block {
+    margin: 10px 0;
+
+    .item-after.orange {
+        color: $btnColor;
+    }
+}
+
+.content-block {
+    margin: 10px 0;
+    .content-block-inner {
+        border-top: 1px solid $borderColor;
+        border-bottom: 1px solid $borderColor;
+    }
+}
+
+.toolbar {
+    height: 60px;
+    background: $toolbarBgColor;
+    border-top: 1px solid $toolbarBgColor;
+}
+
+#nodata {
+    text-align: center;
+    position: absolute;
+    top: 40%;
+    left: 0;
+    width: 100%;
+    line-height: 40px;
+    padding: 0;
+    margin: 0 0 0;
+    display: none;
+    color: $labelColor;
+}
+#loadmore {
+    padding: 5px 0;
+    text-align: center;
+    color: $tipsColor;
+}
+
+.toolbar{
+    height: 55px;
+    border: 0px;
+    .toolbar-inner{
+        padding: 0;
+
+        p{
+            width: 100%;
+            display: block;
+            margin: 0;
+            span{
+                float: left;
+                height: 55px;
+                text-align: center;
+                vertical-align: middle;
+                margin: 0 auto;
+                a{
+                    display: block;
+                    color: #fff;
+
+                    &.gray{
+                        background-color: #eee;
+                        color: #ccc;
+                    }
+                }
+            }
+            span:nth-child(1){
+                width: 29%;
+                padding-top: 13px;
+                font-size: 12px;
+                a{
+                    display: inline-block;
+                    color: #999;
+                }
+                .call-font{
+                    font-size: 11px;
+                    color: #47abe9;
+                }
+            }
+            span:nth-child(2){
+                width: 71%;
+                line-height: 55px;
+                font-size: 18px;
+                background-color: #f50;
+            }
+        }
+    }
+}
+
+.hide{
+    display: none;
+}

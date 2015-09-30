@@ -1,0 +1,14 @@
+extends ./layout.jade
+
+block title
+    title list
+
+append style
+    link(rel='stylesheet', href='/list/index.css')
+
+block content
+    div.content I'm a list.
+    a(href="./test.html") 到 test.html
+
+append scripts
+    script(src="/list/index.js")
