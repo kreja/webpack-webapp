@@ -15,12 +15,9 @@ with
 * watch and auto refresh
 
 
-# 启动
+# Usage
 
 ```bash
-npm run watch
+grunt serve
 ```
-
-```bash
-npm run build
-```
+ open http://localhost:9000/list.html
