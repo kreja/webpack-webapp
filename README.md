@@ -1,19 +1,16 @@
-根据 http://yujiangshui.com/grunt-basic-tutorial 的示例项目更改而成
-
-<del>不能分模块引入 js，即不遵循 *MD 规范。</del>
-
-引入 webpack 模块化啦~
+# webpack-webapp with grunt
 
 ### Features
 use
 
 * jade
-* sass
+* sass(css inside js)
 
 with
 
+* webpack
 * postcss
-* ~~sprite~~
+* jshint
 * uglify
 * watch and auto refresh
 
