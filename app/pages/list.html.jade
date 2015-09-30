@@ -1,0 +1,15 @@
+extends ./layout.html.jade
+
+block title
+    title list
+
+append style
+    link(rel='stylesheet', href='/list/index.css')
+
+block content
+    div.content I'm list
+    a(href="./test.html") link to test.html
+    div.tmpl-content
+
+append scripts
+    script(src="/list/index.js")
