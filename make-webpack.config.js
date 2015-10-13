@@ -25,35 +25,50 @@ function makeConf(options){
 
     var entry = genEntries(dev);
 
-    entry.vendor = ['jquery']; // 不需要打进入口文件的第三方包，这里指定了才会提取到 vendor 中
+    entry.vendor = ['jquery', 'bootstrapJs', 'bootstrapCss']; // 不需要打进入口文件的第三方包，这里指定了才会提取到 vendor 中
 
     var output = {
         path: path.resolve(__dirname, appConfig.dist),
-        filename: "[name].js",
+        filename: '[name].js',
         publicPath: ''
     };
-    var loaders = [
-        {
+    var loaders = [{
             test: /\.tmpl\.jade$/,
             loader: 'jade'
-        },
-        {
+        },{
             test: /\.html\.jade$/,
             loader: 'file-loader?name=[path][name]&context=' + appConfig.viewDir + '!jade-html'
-        },
-        {
-            test: /\.scss$/,
+        },{
+            test: /\.s?css$/,
             loader: ExtractTextPlugin.extract('style', 'css?sourceMap!sass') // css 分离出来单独引入
+        },{
+            test: /\.(jpe?g|png|gif|svg)$/i,
+            loader: 'url?limit=100000'
+        },{
+            test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+            loader: 'url?limit=10000&minetype=application/font-woff'
+        },{
+            test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+            loader: 'url?limit=10000&minetype=application/font-woff'
+        },{
+            test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+            loader: 'url?limit=10000&minetype=application/octet-stream'
+        },{
+            test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+            loader: 'file'
+        },{
+            test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+            loader: 'url?limit=10000&minetype=image/svg+xml'
         }
     ];
     var plugins = [
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'), // 第三方包打成 vendor.js
         new webpack.ProvidePlugin({ // 每个模块都会有 $，而且不需要 require("jquery") 了
-            $: "jquery",
-            jQuery: "jquery",
-            "window.jQuery": "jquery"
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery'
         }),
-        new ExtractTextPlugin('[name].css', {
+        new ExtractTextPlugin('[name].css', { // 这里会把 vendor.js 里的 css 提出来写成 vendor.css
             // 当allChunks指定为false时，css loader必须指定怎么处理
             // additional chunk所依赖的css，即指定`ExtractTextPlugin.extract()`
             // 第一个参数`notExtractLoader`，一般是使用style-loader
@@ -61,7 +76,9 @@ function makeConf(options){
         })
     ];
     var alias = {
-        jquery: path.resolve(appConfig.app) + "/bower_components/jquery/dist/jquery.js", // 就可以 require('jquery') 而不用整个路径了
+        jquery: path.resolve(appConfig.app) + '/bower_components/jquery/dist/jquery.js', // 就可以 require('jquery') 而不用整个路径了
+        bootstrapJs: path.resolve(appConfig.app) + '/mods/darkly-ui/javascripts/bootstrap.js',
+        bootstrapCss: path.resolve(appConfig.app) + '/mods/darkly-ui/stylesheets/bootstrap.css'
     };
 
     // 开发阶段

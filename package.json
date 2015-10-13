@@ -14,12 +14,13 @@
     "jade-loader": "~0.7.1",
     "sass-loader": "~2.0.1",
     "style-loader": "~0.12.4",
+    "url-loader": "~0.5.6",
     "webpack": "~1.12.2",
     "webpack-dev-server": "~1.12.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --config webpack-dev.config.js",
-    "build": "webpack --config webpack-production.config.js --profile"
+    "dev": "webpack-dev-server --config webpack-dev.config.js --progress",
+    "build": "webpack --config webpack-production.config.js --profile --progress"
   }
 }
