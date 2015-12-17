@@ -3,8 +3,8 @@
  */
 'use strict';
 
-module.exports = require("./make-webpack.config")({
+module.exports = require('./make-webpack.config')({
     dev: true,
-    devtool: "source-map",
+    devtool: 'source-map',
     debug: true
 });

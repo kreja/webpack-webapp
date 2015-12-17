@@ -2,11 +2,16 @@
  * 基础配置文件
  */
 
+'use strict';
+
 var path = require('path');
 var fs = require('fs');
 var webpack = require('webpack');
 var Clean = require('clean-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ejs = require('ejs');
+var template = ejs.compile(fs.readFileSync(path.resolve('./pages.ejs'), 'utf8'));
 
 var appConfig = {
     app: 'app',
@@ -19,6 +24,84 @@ var excludeFromStats = [
     /node_modules[\\\/]/
 ];
 
+function getAllFiles(root){
+    var res = [] , files = fs.readdirSync(root);
+
+    files.forEach(function(file){
+        var pathname = path.resolve(root+'/'+file), stat = fs.lstatSync(pathname);
+
+        if (!stat.isDirectory()){
+            res.push(pathname.replace(appConfig.pageDir+'/',''));
+        } else {
+            res = res.concat(getAllFiles(pathname));
+        }
+    });
+
+    return res;
+}
+
+/**
+ * 生成入口
+ * @param  {[type]} dev [是否 dev 环境]
+ * @return {[type]}     [description]
+ */
+function genEntries(dev) {
+    var names = getAllFiles(appConfig.pageDir);
+    var map = {};
+
+    names.forEach(function(name) {
+        var m = name.match(/(.+)\.js$/);
+        var entry = m ? m[1] : '';
+        var entryPath = entry ? path.resolve(appConfig.pageDir + '/' + name) : '';
+
+        if(entry){
+            if(dev){
+                // 开发阶段，hot-mode 需要
+                // https://github.com/webpack/webpack/issues/418
+                map[entry] = ['webpack-dev-server/client?http://localhost:8080','webpack/hot/only-dev-server',entryPath];
+            }else{
+                map[entry] = entryPath;
+            }
+        }
+    });
+
+    return map;
+}
+
+/**
+ * 添加所有 HTML page，作为入口文件
+ * @return {[type]} [description]
+ */
+function addHtml(plugins, root){
+    var pages = fs.readdirSync(root);
+
+    var pageLinks = [];
+
+    pages.forEach(function(filename) {
+        var m = filename.match(/(.+)\.html$/);
+
+        if(m) {
+            var conf = {
+                template: path.resolve(root, filename),
+                filename: filename
+            };
+
+            plugins.push(new HtmlWebpackPlugin(conf));
+
+            pageLinks.push(filename);
+        }
+    });
+
+    plugins.push(new HtmlWebpackPlugin({
+        templateContent: template({pageLinks: pageLinks})
+    }));
+}
+
+/**
+ * 生成配置
+ * @param  {[type]} options [description]
+ * @return {[type]}         [description]
+ */
 function makeConf(options){
     options = options || {};
     var dev = options.dev !== undefined ? options.dev : true; // 默认是 开发阶段
@@ -33,11 +116,8 @@ function makeConf(options){
         publicPath: ''
     };
     var loaders = [{
-            test: /\.tmpl\.jade$/,
-            loader: 'jade'
-        },{
-            test: /\.html\.jade$/,
-            loader: 'file-loader?name=[path][name]&context=' + appConfig.viewDir + '!jade-html'
+            test: /\.ejs$/,
+            loader: 'ejs-compiled'
         },{
             test: /\.s?css$/,
             loader: ExtractTextPlugin.extract('style', 'css?sourceMap!sass') // css 分离出来单独引入
@@ -84,8 +164,15 @@ function makeConf(options){
     // 开发阶段
     if(dev){
         plugins = plugins.concat([
-            new webpack.HotModuleReplacementPlugin()
+            new webpack.HotModuleReplacementPlugin(),
+            new HtmlWebpackPlugin({
+                template: 'app/pages/example.html',
+                filename: 'example.html'
+            })
         ]);
+
+        // 自动生成入口文件
+        addHtml(plugins, appConfig.pageDir);
     }
     // build 阶段
     else{
@@ -115,51 +202,11 @@ function makeConf(options){
                 // modules: true,
                 // reasons: true
             },
-            // hot: true, // 去掉之后，修改 html.jade 才会刷新
             historyApiFallback: true, // todo::???
             inline: true
         },
         progress: true
     };
-}
-
-function genEntries(dev) {
-    var names = getAllFiles(appConfig.pageDir);
-    var map = {};
-
-    names.forEach(function(name) {
-        var m = name.match(/(.+)\.js$/);
-        var entry = m ? m[1] : '';
-        var entryPath = entry ? path.resolve(appConfig.pageDir + '/' + name) : '';
-
-        if(entry){
-            if(dev){
-                // 开发阶段，hot-mode 需要
-                // https://github.com/webpack/webpack/issues/418
-                map[entry] = ['webpack-dev-server/client?http://localhost:8080','webpack/hot/only-dev-server',entryPath];
-            }else{
-                map[entry] = entryPath;
-            }
-        }
-    });
-
-    return map;
-}
-
-function getAllFiles(root){
-    var res = [] , files = fs.readdirSync(root);
-
-    files.forEach(function(file){
-        var pathname = path.resolve(root+'/'+file), stat = fs.lstatSync(pathname);
-
-        if (!stat.isDirectory()){
-            res.push(pathname.replace(appConfig.pageDir+'/',''));
-        } else {
-            res = res.concat(getAllFiles(pathname));
-        }
-    });
-
-    return res;
 }
 
 module.exports = makeConf;

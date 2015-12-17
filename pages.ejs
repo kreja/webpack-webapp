@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>所有页面</title>
+    <style>
+        .link{
+            line-height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <%
+            for(var i=0; i<pageLinks.length; i++){
+            var pageName = pageLinks[i];
+        %>
+            <li><a class="link" href="/<%= pageName %>"><%= pageName %></a></li>
+        <% } %>
+    </ul>
+</body>
+</html>

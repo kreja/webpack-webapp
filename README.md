@@ -1,8 +1,10 @@
-# webpack-webapp
+# webpack-webapp(with-html)
+No jade used, just html.
+Use ejs as template engine
 
 ### Features
 * webpack(support amd/CommonJS)
-* jade
+* ejs
 * sass (css extracted from js)
 * uglify when build
 * auto refresh(but not hot module replacement, it's a problem to be solved..)
@@ -20,15 +22,10 @@ development:
 npm run dev
 ```
 
-open http://localhost:8080/list.html
+open [http://localhost:8080](http://localhost:8080), the pages are listed as links
 
 build:
 
 ```bash
 npm run build
 ```
-
-
-
-### todo
-* hot module replacement doesn't work

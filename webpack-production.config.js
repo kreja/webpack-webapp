@@ -3,6 +3,6 @@
  */
 'use strict';
 
-module.exports = require("./make-webpack.config")({
+module.exports = require('./make-webpack.config')({
     dev: false
 });
