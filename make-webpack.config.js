@@ -164,11 +164,7 @@ function makeConf(options){
     // 开发阶段
     if(dev){
         plugins = plugins.concat([
-            new webpack.HotModuleReplacementPlugin(),
-            new HtmlWebpackPlugin({
-                template: 'app/pages/example.html',
-                filename: 'example.html'
-            })
+            new webpack.HotModuleReplacementPlugin()
         ]);
 
         // 自动生成入口文件
